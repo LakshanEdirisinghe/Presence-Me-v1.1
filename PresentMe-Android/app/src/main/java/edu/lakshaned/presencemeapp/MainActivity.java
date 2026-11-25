@@ -21,6 +21,8 @@ import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import android.os.Handler;
+import android.os.Looper;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class MainActivity extends AppCompatActivity {
@@ -168,13 +170,19 @@ public class MainActivity extends AppCompatActivity {
                 if (success) {
 
                     String role = jsonResponse.optString("role");
-//                    Log.i("Role_Name :",role);
+                    Log.i("Role_Name :",role);
 
                     tvError.setText(
                             "Login successful! Role: " + role
                     );
 
-                    DashboardLoder.screenLoder(role);
+//                    DashboardLoder.screenLoder(role, this);
+
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+
+                        DashboardLoder.screenLoder(role, MainActivity.this);
+
+                    }, 2000);
 
                 } else {
 
