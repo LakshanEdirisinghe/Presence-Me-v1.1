@@ -181,3 +181,258 @@ VALUES
 ('LEC001', 'LECT2026001');
 
 
+USE main;
+
+-- 1. FACULTY
+CREATE TABLE FACULTY (
+    faculty_code VARCHAR(20) PRIMARY KEY,
+    faculty_name VARCHAR(100) NOT NULL
+);
+
+-- 2. DEPARTMENT
+CREATE TABLE DEPARTMENT (
+    department_code VARCHAR(20) PRIMARY KEY,
+    department_name VARCHAR(100) NOT NULL,
+    faculty_code VARCHAR(20) NOT NULL,
+
+    CONSTRAINT fk_department_faculty
+    FOREIGN KEY (faculty_code)
+    REFERENCES FACULTY(faculty_code)
+);
+
+ALTER TABLE DEGREE
+ADD COLUMN department_code VARCHAR(20) NULL;
+
+ALTER TABLE DEGREE
+ADD CONSTRAINT fk_degree_department
+FOREIGN KEY (department_code)
+REFERENCES DEPARTMENT(department_code);
+
+CREATE TABLE SEMESTER (
+    academic_year VARCHAR(9) NOT NULL,
+    semester_no TINYINT UNSIGNED NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+
+    PRIMARY KEY (academic_year, semester_no)
+);
+
+CREATE TABLE SUBJECT (
+    subject_code VARCHAR(20) PRIMARY KEY,
+    subject_name VARCHAR(100) NOT NULL,
+    academic_year VARCHAR(9) NOT NULL,
+    semester_no TINYINT UNSIGNED NOT NULL,
+    lecturer_code VARCHAR(30) NOT NULL,
+    credits DECIMAL(3,1) DEFAULT 3.0,
+
+    CONSTRAINT fk_subject_semester
+    FOREIGN KEY (academic_year, semester_no)
+    REFERENCES SEMESTER(academic_year, semester_no),
+
+    CONSTRAINT fk_subject_lecturer
+    FOREIGN KEY (lecturer_code)
+    REFERENCES LECTURER(lecturer_code)
+);
+CREATE TABLE SUBJECT_OF_DEGREE (
+    degree_code VARCHAR(20) NOT NULL,
+    subject_code VARCHAR(20) NOT NULL,
+
+    PRIMARY KEY (degree_code, subject_code),
+
+    CONSTRAINT fk_sod_degree
+    FOREIGN KEY (degree_code)
+    REFERENCES DEGREE(degree_code),
+
+    CONSTRAINT fk_sod_subject
+    FOREIGN KEY (subject_code)
+    REFERENCES SUBJECT(subject_code)
+);
+CREATE TABLE DEPARTMENT_LECTURER (
+    department_code VARCHAR(20) NOT NULL,
+    lecturer_code VARCHAR(30) NOT NULL,
+
+    PRIMARY KEY (department_code, lecturer_code),
+
+    CONSTRAINT fk_dl_department
+    FOREIGN KEY (department_code)
+    REFERENCES DEPARTMENT(department_code),
+
+    CONSTRAINT fk_dl_lecturer
+    FOREIGN KEY (lecturer_code)
+    REFERENCES LECTURER(lecturer_code)
+);
+
+CREATE TABLE REGISTERED_DEVICE (
+    android_id VARCHAR(100) PRIMARY KEY,
+    uni_id VARCHAR(30) NOT NULL,
+    registered_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    device_status ENUM('ACTIVE', 'BLOCKED') DEFAULT 'ACTIVE',
+
+    CONSTRAINT fk_device_student
+    FOREIGN KEY (uni_id)
+    REFERENCES STUDENT(uni_id)
+);
+
+CREATE TABLE ATTENDANCE_SESSION (
+    session_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+    lecturer_code VARCHAR(30) NOT NULL,
+    subject_code VARCHAR(20) NOT NULL,
+    +Student list code
+
+    -lecture_date DATE NOT NULL,
+    lecture_start_time TIME NOT NULL,
+    lecture_end_time TIME NOT NULL,
+
+    qr_token CHAR(64) NOT NULL UNIQUE,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    expires_at DATETIME NOT NULL,
+
+    session_status ENUM('ACTIVE', 'EXPIRED', 'CANCELLED')
+    DEFAULT 'ACTIVE',
+
+    CONSTRAINT fk_session_lecturer
+    FOREIGN KEY (lecturer_code)
+    REFERENCES LECTURER(lecturer_code),
+
+    CONSTRAINT fk_session_subject
+    FOREIGN KEY (subject_code)
+    REFERENCES SUBJECT(subject_code)
+);
+alter table main.ATTENDANCE_SESSION
+drop column lecture_date;
+
+CREATE TABLE ATTENDANCE (
+    attendance_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+    session_id BIGINT UNSIGNED NOT NULL,
+    uni_id VARCHAR(30) NOT NULL,
+
+    attendance_status ENUM('PRESENT', 'LATE', 'ABSENT')
+    DEFAULT 'PRESENT',
+
+    marked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_attendance_session
+    FOREIGN KEY (session_id)
+    REFERENCES ATTENDANCE_SESSION(session_id),
+
+    CONSTRAINT fk_attendance_student
+    FOREIGN KEY (uni_id)
+    REFERENCES STUDENT(uni_id),
+
+    CONSTRAINT unique_student_session
+    UNIQUE (session_id, uni_id)
+);
+
+
+
+INSERT INTO FACULTY (faculty_code, faculty_name)
+VALUES
+('FAC001', 'Faculty of Computing and Technology'),
+('FAC002', 'Faculty of Health Sciences and Technology'),
+('FAC003', 'Faculty of Management Studies');
+
+
+INSERT INTO DEPARTMENT
+(department_code, department_name, faculty_code)
+VALUES
+('DEP001', 'Department of Software Engineering', 'FAC001'),
+('DEP002', 'Department of Health Information Technology', 'FAC002'),
+('DEP003', 'Department of Business Analytics', 'FAC003');
+
+UPDATE DEGREE
+SET department_code =
+    CASE degree_code
+        WHEN 'SE' THEN 'DEP001'
+        WHEN 'HICT' THEN 'DEP002'
+        WHEN 'MBA' THEN 'DEP003'
+    END
+WHERE degree_code IN ('SE', 'HICT', 'MBA');
+
+ALTER TABLE DEGREE
+MODIFY department_code VARCHAR(20) NOT NULL;
+
+INSERT INTO SEMESTER
+(academic_year, semester_no, start_date, end_date)
+VALUES
+('2026/2027', 1, '2026-08-01', '2026-12-31'),
+('2026/2027', 2, '2027-01-01', '2027-05-31');
+
+INSERT INTO DEPARTMENT_LECTURER
+(department_code, lecturer_code)
+VALUES
+('DEP001', 'LECT2026001');
+
+INSERT INTO SUBJECT
+(subject_code, subject_name, academic_year,
+ semester_no, lecturer_code, credits)
+VALUES
+('SE101', 'Programming Fundamentals',
+ '2026/2027', 1, 'LECT2026001', 3.0),
+
+('SE102', 'Object Oriented Programming',
+ '2026/2027', 1, 'LECT2026001', 3.0);
+
+ INSERT INTO SUBJECT_OF_DEGREE
+(degree_code, subject_code)
+VALUES
+('SE', 'SE101'),
+('SE', 'SE102');
+
+INSERT INTO REGISTERED_DEVICE
+(android_id, uni_id)
+VALUES
+('a1b2c3d4e5f67890', 'UOC/SE/2022/13');
+
+
+INSERT INTO ATTENDANCE_SESSION
+(lecturer_code, subject_code, lecture_date,
+ lecture_start_time, lecture_end_time,
+ qr_token, expires_at, session_status)
+VALUES
+(
+    'LECT2026001',
+    'SE101',
+    CURDATE(),
+    TIME(NOW()),
+    TIME(DATE_ADD(NOW(), INTERVAL 1 HOUR)),
+    SHA2(UUID(), 256),
+    DATE_ADD(NOW(), INTERVAL 10 MINUTE),
+    'ACTIVE'
+);
+
+SET @demo_session_id = LAST_INSERT_ID();
+
+SELECT
+    session_id,
+    lecturer_code,
+    subject_code,
+    qr_token
+FROM ATTENDANCE_SESSION
+ORDER BY session_id DESC
+LIMIT 5;
+
+INSERT INTO ATTENDANCE
+(session_id, uni_id, attendance_status)
+VALUES
+(1, 'UOC/SE/2022/13', 'PRESENT'),
+(1, 'UOC/SE/2021/06', 'PRESENT');
+
+
+alter table main.LECTURER
+add unique (lecturer_code);
+
+
+
+alter table main.ATTENDANCE_SESSION
+add column student_list_code varchar(30) not null;
+
+update main.ATTENDANCE_SESSION
+set student_list_code="UOC/MBA/2022"
+where lecturer_code="LECT2026001";
+
+alter table main.ATTENDANCE_SESSION 
+  add constraint foreign key (student_list_code) references main.STUDENT_LIST(student_list_code)
+  ON UPDATE CASCADE ON DELETE CASCADE;

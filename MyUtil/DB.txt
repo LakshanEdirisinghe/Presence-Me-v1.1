@@ -11,28 +11,6 @@ Degree ( Degree code[PK], Department Code[FK]
 Student List (Student list code[PK], 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Registered_Device ( Android id[PK], Uni ID[FK])
 
 
@@ -63,4 +41,13 @@ MySQL 8.4 LTS · 0.25 vCPU · 512 MB · United States
 presence-me-xxxxxx.db.enzonic.com
 
 mysql -h presenceme-0v58kj.db.enzonic.com -P 3306 -u u_wwfcdmqexx-presenceme-0v58kj --ssl-mode=REQUIRED -p
+
+
+
+
+
+
+
+
+
 
