@@ -1,0 +1,66 @@
+USER(user_id-PK,First_Name,Last_Name,Email,Password_hash, Contact_No,Account_status); 
+
+ADMIN ( user_id [Admin]-FK/PK); 
+
+STUDENT( user_id-FK/PK, Uni ID,Degree code[FK],Student list code[FK]);
+
+LECTURER( user_id-FK/PK, Lecturer code)
+
+Degree ( Degree code[PK], Department Code[FK]
+
+Student List (Student list code[PK], 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Registered_Device ( Android id[PK], Uni ID[FK])
+
+
+Subject ( Subject code[PK],Academic Year[FK], Semester[FK], Lecturer code[FK]
+
+Subject of a Degree (Degree code[FK],Subject code[FK]
+
+Semester ( Academic Year[PK], Semester[PK]
+
+Department ( Department Code[PK], Faculty code[FK] 
+
+Faculty ( Faculty code[PK] 
+
+Department of a Lecturer(Department Code[FK],Lecturer code[FK] 
+
+Attendance Session ( session_id[PK], Lecturer code[FK], Subject code[FK],Expire at,  Actual Lecture  TIME (Period)
+
+
+Attendance (Attendance ID[PK],session_id[FK], Uni ID[FK], attendance_status
+
+
+
+
+
+
+presence-me
+MySQL 8.4 LTS · 0.25 vCPU · 512 MB · United States
+presence-me-xxxxxx.db.enzonic.com
+
+mysql -h presenceme-0v58kj.db.enzonic.com -P 3306 -u u_wwfcdmqexx-presenceme-0v58kj --ssl-mode=REQUIRED -p
+
