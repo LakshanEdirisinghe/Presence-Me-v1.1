@@ -14,21 +14,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PresenceMeApp"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".LecturerDashboardActivity"
             android:exported="false" />
+
         <activity
             android:name=".StudentDashboardActivity"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
     </application>
 
 </manifest>
