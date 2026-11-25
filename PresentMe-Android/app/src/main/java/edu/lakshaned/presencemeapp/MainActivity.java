@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String BASE_URL =
             "http://192.168.1.2:8080";
+
+
     private TextInputEditText etEmail, etPassword;
     private Button btnLogin;
     private TextView tvError;
@@ -166,10 +168,13 @@ public class MainActivity extends AppCompatActivity {
                 if (success) {
 
                     String role = jsonResponse.optString("role");
+//                    Log.i("Role_Name :",role);
 
                     tvError.setText(
                             "Login successful! Role: " + role
                     );
+
+                    DashboardLoder.screenLoder(role);
 
                 } else {
 
@@ -199,4 +204,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
