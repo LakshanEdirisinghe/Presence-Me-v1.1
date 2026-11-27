@@ -170,13 +170,25 @@ public class MainActivity extends AppCompatActivity {
                 if (success) {
 
                     String role = jsonResponse.optString("role");
-                    Log.i("Role_Name :",role);
+                    String userId = jsonResponse.optString("userId");
+                    String firstName = jsonResponse.optString("firstName");
+                    String lastName = jsonResponse.optString("lastName");
+
+                    // Save logged-in user details
+                    getSharedPreferences("PresentMePrefs", MODE_PRIVATE)
+                            .edit()
+                            .putString("userId", userId)
+                            .putString("role", role)
+                            .putString("firstName", firstName)
+                            .putString("lastName", lastName)
+                            .apply();
+
+                    Log.i("LOGIN_USER", "User ID: " + userId);
+                    Log.i("LOGIN_USER", "Role: " + role);
 
                     tvError.setText(
                             "Login successful! Role: " + role
                     );
-
-//                    DashboardLoder.screenLoder(role, this);
 
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
 
