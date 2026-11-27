@@ -45,9 +45,31 @@ mysql -h presenceme-0v58kj.db.enzonic.com -P 3306 -u u_wwfcdmqexx-presenceme-0v5
 
 
 
+| Menu Item | Function |
+|---|---|
+| Create New QR | අලුත් QR session එකක් හදන්න |
+| QR History | කලින් generate කරපු QR sessions බලන්න |
+| Logout | Logout වෙන්න |
 
+Create New QR
 
+Student Batch:       2022/2023
+Academic Year : 2024/2025
+Semester:            Semester 1
+Degree:              BSc (Hons) Software Engineering
+Subject:             Software Engineering
 
+Lecture Start Time:  08:00 AM
+Lecture End Time:    10:00 AM
 
+QR Expires At:       08:30 AM
 
+       [ Generate QR ]
 
+03. Generate & Manage QR
+QR generate කළාට පස්සේ Lecturerට:
+- Generated QR එක බලන්න.
+- QR එකේ session details බලන්න.
+- QR එක Activate කරන්න.
+- QR එක Deactivate කරන්න.
+- Expiration time එක පසු වූ විට QR එක automatically expire කරන්න.

@@ -49,4 +49,28 @@
         android:textStyle="bold"
         android:textColor="#172B4D" />
 
+    <!-- Generate New QR Button -->
+    <Button
+        android:id="@+id/btnGenerateNewQR"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Generate New QR" />
+
+    <!-- View QR History Button -->
+    <Button
+        android:id="@+id/btnViewQRHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="View QR History" />
+
+    <!-- Logout Button -->
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Logout" />
+
 </LinearLayout>
