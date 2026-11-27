@@ -15,6 +15,9 @@
         android:theme="@style/Theme.PresenceMeApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".QrHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".CreateNewQrActivity"
             android:exported="false" />
         <activity
