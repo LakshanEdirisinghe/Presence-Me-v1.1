@@ -4,6 +4,7 @@ import edu.lakshaned.presenceme_backend.entity.Lecturer;
 import edu.lakshaned.presenceme_backend.repository.LecturerRepository;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,8 +17,10 @@ public class LecturerController {
         this.lecturerRepository = lecturerRepository;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getLecturer(@PathVariable String userId) {
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentLecturer(Authentication authentication) {
+
+        String userId = authentication.getName();
 
         return lecturerRepository.findById(userId)
                 .map(lecturer -> ResponseEntity.ok(lecturer))
