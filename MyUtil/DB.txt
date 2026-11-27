@@ -73,3 +73,7 @@ QR generate කළාට පස්සේ Lecturerට:
 - QR එක Activate කරන්න.
 - QR එක Deactivate කරන්න.
 - Expiration time එක පසු වූ විට QR එක automatically expire කරන්න.
+
+
+PS C:\WINDOWS\system32> $key = New-Object byte[] 32; $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create(); $rng.GetBytes($key); [Convert]::ToBase64String($key)
+vNZKtgbhOLyd1JKObfnhWWJAgGfppIMfwSwsNU/OVg4=

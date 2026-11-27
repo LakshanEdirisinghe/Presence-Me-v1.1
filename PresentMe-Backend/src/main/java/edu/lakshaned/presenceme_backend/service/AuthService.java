@@ -4,13 +4,12 @@ import edu.lakshaned.presenceme_backend.dto.LoginRequest;
 import edu.lakshaned.presenceme_backend.dto.LoginResponse;
 import edu.lakshaned.presenceme_backend.entity.User;
 import edu.lakshaned.presenceme_backend.repository.UserRepository;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import edu.lakshaned.presenceme_backend.repository.AdminRepository;
 import edu.lakshaned.presenceme_backend.repository.LecturerRepository;
 import edu.lakshaned.presenceme_backend.repository.StudentRepository;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
@@ -21,19 +20,22 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public AuthService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             AdminRepository adminRepository,
             LecturerRepository lecturerRepository,
-            StudentRepository studentRepository
+            StudentRepository studentRepository,
+            JwtService jwtService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.adminRepository = adminRepository;
         this.lecturerRepository = lecturerRepository;
         this.studentRepository = studentRepository;
+        this.jwtService = jwtService;
     }
 
     private String identifyRole(String userId) {
@@ -88,8 +90,6 @@ public class AuthService {
             );
         }
 
-        // Role identification will be added next.
-
         // 4. Identify user role
         String role = identifyRole(user.getUserId());
 
@@ -101,11 +101,17 @@ public class AuthService {
             );
         }
 
-// 5. Return successful login response
+        // 5. Generate JWT Token
+        String token = jwtService.generateToken(
+                user.getUserId(),
+                role
+        );
+
+        // 6. Return successful login response
         return new LoginResponse(
                 true,
                 "Login successful",
-                null,
+                token,
                 role,
                 user.getUserId(),
                 user.getFirstName(),
